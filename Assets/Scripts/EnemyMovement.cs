@@ -1,14 +1,21 @@
 using UnityEngine;
 using UnityEngine.AI;
-
+using UnityEngine.InputSystem;
 public class EnemyMovement : MonoBehaviour
 {
     // Reference to the player's transform.
     public Transform player;
+    public AudioSource audioSource;
 
     // Reference to the NavMeshAgent component for pathfinding.
     private NavMeshAgent navMeshAgent;
 
+
+
+    void Awake()
+    {
+        audioSource = GetComponent<AudioSource>();
+    }
     // Start is called before the first frame update.
     void Start()
     {

@@ -23,6 +23,17 @@ public class PlayerController : MonoBehaviour
     // UI object to display winning text.
     public GameObject winTextObject;
 
+    public AudioSource audioSource;
+
+    public AudioSource winAudioSource;
+
+    private bool hasWon;
+
+    void Awake()
+    {
+        audioSource = GetComponent<AudioSource>();
+    }
+
     // Start is called before the first frame update.
     void Start()
     {
@@ -31,6 +42,7 @@ public class PlayerController : MonoBehaviour
 
         // Initialize count to zero.
         count = 0;
+        hasWon = false;
 
         // Update the count display.
         SetCountText();
@@ -71,7 +83,7 @@ public class PlayerController : MonoBehaviour
 
             // Increment the count of "PickUp" objects collected.
             count = count + 1;
-
+            audioSource.Play();
             // Update the count display.
             SetCountText();
         }
@@ -84,10 +96,17 @@ public class PlayerController : MonoBehaviour
         countText.text = "Count: " + count.ToString();
 
         // Check if the count has reached or exceeded the win condition.
-        if (count >= 12)
+        if (!hasWon && count >= 12)
         {
+            hasWon = true;
+
             // Display the win text.
             winTextObject.SetActive(true);
+
+            if (winAudioSource != null)
+            {
+                winAudioSource.Play();
+            }
 
             // Destroy the enemy GameObject.
             Destroy(GameObject.FindGameObjectWithTag("Enemy"));
@@ -98,9 +117,12 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Enemy"))
         {
+            AudioSource enemyAudioSource = collision.gameObject.GetComponent<AudioSource>();
+
+            enemyAudioSource.Play();
+
             // Destroy the current object
             Destroy(gameObject);
-
             // Update the winText to display "You Lose!"
             winTextObject.gameObject.SetActive(true);
             winTextObject.GetComponent<TextMeshProUGUI>().text = "You Lose!";
