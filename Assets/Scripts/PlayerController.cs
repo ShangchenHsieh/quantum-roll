@@ -27,6 +27,10 @@ public class PlayerController : MonoBehaviour
 
     public AudioSource winAudioSource;
 
+    public GameObject explosionFX;
+
+    public GameObject pickupFX;
+
     private bool hasWon;
 
     void Awake()
@@ -84,6 +88,9 @@ public class PlayerController : MonoBehaviour
             // Increment the count of "PickUp" objects collected.
             count = count + 1;
             audioSource.Play();
+
+            var currentPickupFX = Instantiate(pickupFX, other.transform.position, Quaternion.identity);
+            Destroy(currentPickupFX, 3); // play the effect when pick up 
             // Update the count display.
             SetCountText();
         }
@@ -120,7 +127,7 @@ public class PlayerController : MonoBehaviour
             AudioSource enemyAudioSource = collision.gameObject.GetComponent<AudioSource>();
 
             enemyAudioSource.Play();
-
+            Instantiate(explosionFX, transform.position, Quaternion.identity); // play the explosion effect
             // Destroy the current object
             Destroy(gameObject);
             // Update the winText to display "You Lose!"
