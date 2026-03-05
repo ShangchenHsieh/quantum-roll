@@ -100,7 +100,7 @@ public class PlayerController : MonoBehaviour
     void SetCountText()
     {
         // Update the count text with the current count.
-        countText.text = "Count: " + count.ToString();
+        countText.text = "Score: " + count.ToString();
 
         // Check if the count has reached or exceeded the win condition.
         if (!hasWon && count >= 12)
