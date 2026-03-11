@@ -125,16 +125,19 @@ public class PlayerController : MonoBehaviour
         if (collision.gameObject.CompareTag("Enemy"))
         {
             AudioSource enemyAudioSource = collision.gameObject.GetComponent<AudioSource>();
-
-            enemyAudioSource.Play();
-            Instantiate(explosionFX, transform.position, Quaternion.identity); // play the explosion effect
-            // Destroy the current object
             Destroy(gameObject);
+            enemyAudioSource.Play();
+            collision.gameObject.GetComponentInChildren<Animator>().SetFloat("speed_f", 0);
+
+            Instantiate(explosionFX, transform.position, Quaternion.identity); // play the explosion effect
+                                                                               // Destroy the current object
+
             // Update the winText to display "You Lose!"
             winTextObject.gameObject.SetActive(true);
             winTextObject.GetComponent<TextMeshProUGUI>().text = "You Lose!";
 
         }
+
 
     }
 

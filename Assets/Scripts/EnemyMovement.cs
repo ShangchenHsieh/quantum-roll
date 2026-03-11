@@ -10,6 +10,7 @@ public class EnemyMovement : MonoBehaviour
     // Reference to the NavMeshAgent component for pathfinding.
     private NavMeshAgent navMeshAgent;
 
+    private Animator anim;
 
 
     void Awake()
@@ -21,6 +22,7 @@ public class EnemyMovement : MonoBehaviour
     {
         // Get and store the NavMeshAgent component attached to this object.
         navMeshAgent = GetComponent<NavMeshAgent>();
+        anim.SetFloat("speed_f", 1);
     }
 
     // Update is called once per frame.
