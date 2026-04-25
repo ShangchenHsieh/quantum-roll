@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -22,6 +24,9 @@ public class PlayerController : MonoBehaviour
 
     // UI object to display winning text.
     public GameObject winTextObject;
+
+    // Retry button shown after win or loss.
+    public GameObject retryButton;
 
     public AudioSource audioSource;
 
@@ -53,6 +58,31 @@ public class PlayerController : MonoBehaviour
 
         // Initially set the win text to be inactive.
         winTextObject.SetActive(false);
+
+        if (retryButton == null)
+        {
+            Transform[] allTransforms = Resources.FindObjectsOfTypeAll<Transform>();
+            foreach (Transform sceneTransform in allTransforms)
+            {
+                if (sceneTransform.name == "Retry Button" && sceneTransform.gameObject.scene.IsValid())
+                {
+                    retryButton = sceneTransform.gameObject;
+                    break;
+                }
+            }
+        }
+
+        if (retryButton != null)
+        {
+            retryButton.SetActive(false);
+
+            Button retryButtonComponent = retryButton.GetComponent<Button>();
+            if (retryButtonComponent != null)
+            {
+                retryButtonComponent.onClick.RemoveAllListeners();
+                retryButtonComponent.onClick.AddListener(RetryGame);
+            }
+        }
     }
 
     // This function is called when a move input is detected.
@@ -110,6 +140,11 @@ public class PlayerController : MonoBehaviour
             // Display the win text.
             winTextObject.SetActive(true);
 
+            if (retryButton != null)
+            {
+                retryButton.SetActive(true);
+            }
+
             if (winAudioSource != null)
             {
                 winAudioSource.Play();
@@ -136,9 +171,20 @@ public class PlayerController : MonoBehaviour
             winTextObject.gameObject.SetActive(true);
             winTextObject.GetComponent<TextMeshProUGUI>().text = "You Lose!";
 
+            if (retryButton != null)
+            {
+                retryButton.SetActive(true);
+            }
+
         }
 
 
+    }
+
+    public static void RetryGame()
+    {
+        Scene currentScene = SceneManager.GetActiveScene();
+        SceneManager.LoadScene(currentScene.buildIndex);
     }
 
 

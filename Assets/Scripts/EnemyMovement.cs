@@ -16,6 +16,7 @@ public class EnemyMovement : MonoBehaviour
     void Awake()
     {
         audioSource = GetComponent<AudioSource>();
+        anim = GetComponent<Animator>();
     }
     // Start is called before the first frame update.
     void Start()
